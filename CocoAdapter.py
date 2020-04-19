@@ -15,8 +15,9 @@ class CocoAdapter(BaseAnnotationAdapter):
     def _cut_jobs(self):
         annotations = self._annotation_generator()
         for i, leaf_annotation in enumerate(annotations):
-            image_relative_path = self._get_image_path(leaf_annotation["image_id"])
-            image_path = os.path.join(self.dir_path, image_relative_path)
+            # image_relative_path = self._get_image_path(leaf_annotation["image_id"])
+            # image_path = os.path.join(self.dir_path, image_relative_path)
+            image_path = self._get_image_path(leaf_annotation["image_id"])
             yield (leaf_annotation.get("segmentation")[0], image_path, i)
 
     def _annotation_generator(self):
@@ -39,7 +40,7 @@ class CocoAdapter(BaseAnnotationAdapter):
 
     def _get_image_path(self, image_id):
         images = self.data.get("images")
-        image_path = [image["file_name"] for image in images if image["id"] == image_id][0]
+        image_path = [image["coco_url"] for image in images if image["id"] == image_id][0]
         return image_path
 
     def __next__(self):
